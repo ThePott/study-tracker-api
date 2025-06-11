@@ -1,7 +1,7 @@
 import express from "express"
 import { errorHandler } from "../config/errorHandler"
-import { studentCollection } from "../config/database"
-
+import { studentCollection, progressCollection, bookCollection } from "../config/database"
+const { ObjectId } = require("mongodb")
 const router = express.Router()
 
 router.post("/", async (req, res, next) => {
@@ -22,6 +22,53 @@ router.get("/", async (req, res, next) => {
         next(error)
     }
 })
+
+router.get("/:id/progress", async (req, res, next) => {
+    try {
+        const studentIdString = req.params.id
+        const studentId = ObjectId.createFromHexString(studentIdString)
+        // const student = await studentCollection.findOne({ _id })
+
+        const progressArray = await progressCollection.find({ studentId }).toArray()
+
+        res.status(200).json(progressArray)
+
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.post("/:id/progress", async (req, res, next) => {
+    try {
+        const studentIdString = req.params.id
+        const studentId = ObjectId.createFromHexString(studentIdString)
+
+        const { bookIdString } = req.body
+        const bookId = ObjectId.createFromHexString(bookIdString)
+        const book = await bookCollection.findOne({ _id: bookId })
+
+        console.log("---- yas")
+
+        res.status(200).json(bookIdString)
+
+    } catch (error) {
+        console.log("---- got error here")
+        next(error)
+    }
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 router.use(errorHandler);
 
