@@ -1,7 +1,7 @@
 import express from "express"
 import { errorHandler } from "../config/errorHandler"
 import { studentCollection, progressCollection, bookCollection } from "../config/database"
-import { ObjectId } from "mongodb"
+import { AnyBulkWriteOperation, ObjectId, Document } from "mongodb"
 
 import { prepareForAssigningBook } from "./studentOperation"
 
@@ -29,6 +29,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:id/progress", async (req, res, next) => {
     try {
         const studentIdString = req.params.id
+        console.log(`---- length: ${studentIdString.length} "${studentIdString}"`)
         const studentId = ObjectId.createFromHexString(studentIdString)
         // const student = await studentCollection.findOne({ _id })
 
@@ -55,9 +56,11 @@ router.post("/:id/progress", async (req, res, next) => {
             throw error
         }
 
-        prepareForAssigningBook(studentId, book)
+        const bulkProgressOperationArray: readonly AnyBulkWriteOperation<Document>[] = prepareForAssigningBook(studentId, book)
+        // const 
+        const result = await progressCollection.bulkWrite(bulkProgressOperationArray, { ordered: false });
 
-        res.status(200).json(bookIdString)
+        res.status(200).json(result)
 
     } catch (error) {
         next(error)
