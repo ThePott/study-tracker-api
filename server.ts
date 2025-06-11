@@ -1,8 +1,11 @@
 import dotenv from "dotenv"
+dotenv.config()
+
 import express from "express"
 import http from "http"
 import studentRoute from "./api/studentRoute"
-dotenv.config()
+import bookRoute from "./api/bookRoute"
+
 
 const app = express()
 const server = http.createServer(app)
@@ -14,6 +17,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/student", studentRoute)
+app.use("/book", bookRoute)
 
 const port = process.env.PORT || 3030
 server.listen(port, () => {

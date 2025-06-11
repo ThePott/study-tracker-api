@@ -1,20 +1,23 @@
 import express from "express"
 import { errorHandler } from "../config/errorHandler"
+import { studentCollection } from "../config/database"
 
 const router = express.Router()
 
-router.get("/test1", async (req, res, next) => {
+router.post("/", async (req, res, next) => {
     try {
-        console.log("test1 called")
-        res.status(200).json({ message: "test 1 called" })
+        const { name } = req.body
+        const result = await studentCollection.insertOne({ name })
+        res.status(200).json({ result })
     } catch (error) {
         next(error)
     }
 })
 
-router.get("/test2", async (req, res, next) => {
+router.get("/", async (req, res, next) => {
     try {
-        res.status(200).json({ message: "test 2 called" })
+        const result = await studentCollection.find({}).toArray()
+        res.status(200).json(result)
     } catch (error) {
         next(error)
     }

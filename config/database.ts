@@ -1,22 +1,21 @@
-import dotenv from "dotenv"
-import express from "express"
-import http from "http"
 
-dotenv.config()
+import { MongoClient, ServerApiVersion } from "mongodb"
 
-const app = express()
-const server = http.createServer(app)
+const uri = process.env.MONGODB_URI
+
+if (!uri) { console.log("FUUUUUUUUCKKKKK")}
 
 
-app.use(express.json())
-app.get("/", (req, res) => {
-    console.log("----- connected to client -----")
-    res.send("Hello, welcome to my application!");
+const client = new MongoClient(uri!, {
+	serverApi: {
+		version: ServerApiVersion.v1,
+		strict: true,
+		deprecationErrors: true,
+	}
 })
+const db = client.db("StudyTrackerDb")
+const bookCollection = db.collection("bookCollection")
+const studentCollection = db.collection("studentCollection")
+const progressCollection = db.collection("progressCollection")
 
-const port = process.env.PORT || 3030
-server.listen(port, () => {
-	console.log(`Server is running on port ${port}`)
-})
-
-
+export { client, db, bookCollection, progressCollection, studentCollection }
