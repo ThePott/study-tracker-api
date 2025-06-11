@@ -1,7 +1,10 @@
 import express from "express"
 import { errorHandler } from "../config/errorHandler"
 import { studentCollection, progressCollection, bookCollection } from "../config/database"
-const { ObjectId } = require("mongodb")
+import { ObjectId } from "mongodb"
+
+import { prepareForAssigningBook } from "./studentOperation"
+
 const router = express.Router()
 
 router.post("/", async (req, res, next) => {
@@ -46,13 +49,17 @@ router.post("/:id/progress", async (req, res, next) => {
         const { bookIdString } = req.body
         const bookId = ObjectId.createFromHexString(bookIdString)
         const book = await bookCollection.findOne({ _id: bookId })
+        if (!book) {
+            const error = new Error("Book Not Found")
+            error.name = "NOT_FOUND_ERROR"
+            throw error
+        }
 
-        console.log("---- yas")
+        prepareForAssigningBook(studentId, book)
 
         res.status(200).json(bookIdString)
 
     } catch (error) {
-        console.log("---- got error here")
         next(error)
     }
 })
