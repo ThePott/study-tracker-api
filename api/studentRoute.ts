@@ -29,7 +29,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:id/progress", async (req, res, next) => {
     try {
         const studentIdString = req.params.id
-        console.log(`---- length: ${studentIdString.length} "${studentIdString}"`)
+        // console.log(`---- length: ${studentIdString.length} "${studentIdString}"`)
         const studentId = ObjectId.createFromHexString(studentIdString)
         // const student = await studentCollection.findOne({ _id })
 
