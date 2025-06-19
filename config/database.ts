@@ -1,4 +1,3 @@
-
 import { MongoClient, ServerApiVersion } from "mongodb"
 
 const uri = process.env.MONGODB_URI
@@ -17,5 +16,6 @@ const db = client.db("StudyTrackerDb")
 const bookCollection = db.collection("bookCollection")
 const studentCollection = db.collection("studentCollection")
 const progressCollection = db.collection("progressCollection")
+const reviewCheckCollection = db.collection("reviewCheckCollection")
 
-export { client, db, bookCollection, progressCollection, studentCollection }
+export { client, db, bookCollection, progressCollection, studentCollection, reviewCheckCollection }
