@@ -1,12 +1,28 @@
 import express from "express"
 import { errorHandler } from "../config/errorHandler"
 import { bookCollection, progressCollection, studentCollection } from "../config/database"
+import { ObjectId } from "mongodb"
 
 const router = express.Router()
 
 router.get("/", async (req, res, next) => {
     try {
         const result = await bookCollection.find({}).toArray()
+        res.status(200).json(result)
+    } catch (error) {
+        next(error)
+    }
+})
+router.get("/:id", async (req, res, next) => {
+    try {
+        const stringId = req.params.id
+        const objectId = ObjectId.createFromHexString(stringId)
+        const result = await bookCollection.findOne({ _id: objectId })
+        if (!result) {
+            const error = new Error("Book Not Found")
+            error.name = "NotFoundError"
+            throw error
+        }
         res.status(200).json(result)
     } catch (error) {
         next(error)

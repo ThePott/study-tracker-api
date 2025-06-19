@@ -7,6 +7,7 @@ import cors from "cors"  // Add this import
 
 import studentRoute from "./api/studentRoute"
 import bookRoute from "./api/bookRoute"
+import progressRoute from "./api/progressRoute"
 
 
 const app = express()
@@ -28,6 +29,7 @@ app.get("/", (req, res) => {
 
 app.use("/student", studentRoute)
 app.use("/book", bookRoute)
+app.use("/progress", progressRoute)
 
 const port = process.env.PORT || 3030
 server.listen(port, () => {
