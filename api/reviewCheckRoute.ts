@@ -5,10 +5,9 @@ import { ObjectId } from "mongodb"
 import convertToJson, { ReviewCheckData } from "../demo/reviewCheckConverter"
 const router = express.Router()
 
-router.post("/", async (req, res, next) => {
+router.post("/:studentId/development", async (req, res, next) => {
     try {
-        console.log("----here")
-        const { studentId } = req.body
+        const studentId = req.params.studentId
         const objectId = ObjectId.createFromHexString(studentId)
         const student = await studentCollection.findOne({ _id: objectId })
         if (!student) {
@@ -28,6 +27,8 @@ router.post("/", async (req, res, next) => {
 
 
         res.status(200).json(result)
+
+        // res.status(200).json(convertedJson)
     } catch (error) {
         next(error)
     }
@@ -49,6 +50,16 @@ router.get("/:studentId", async (req, res, next) => {
 
         const result = await reviewCheckCollection.find({studentId: studentId}).toArray()
         // console.log("---- second", result.length)
+        res.status(200).json(result)
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.delete("/:studentId", async (req, res, next) => {
+    try {
+        const studentId = req.params.studentId
+        const result = await reviewCheckCollection.deleteMany({studentId})
         res.status(200).json(result)
     } catch (error) {
         next(error)

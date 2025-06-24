@@ -31,10 +31,6 @@ router.get("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
     try {
-        // const existingBookArray = await bookCollection.find({}).toArray()
-
-
-        // console.log(req.body)
         const { title, topicArray } = req.body
         // const result = await bookCollection.insertOne({title, topicArray})
         const result = await bookCollection.findOneAndUpdate(
