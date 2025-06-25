@@ -3,6 +3,8 @@ import { errorHandler } from "../config/errorHandler"
 import { bookCollection, progressCollection, studentCollection } from "../config/database"
 import { ObjectId } from "mongodb"
 
+import convertToBook from "../demo/synergy-book-converter"
+
 const router = express.Router()
 
 router.get("/", async (req, res, next) => {
@@ -42,6 +44,35 @@ router.post("/", async (req, res, next) => {
         res.status(200).json({ message: "inserted book", result })
     } catch (error) {
         next(error)
+    }
+})
+
+router.post("/development", async (req, res, next) => {
+    try {
+        const book = convertToBook()
+        const { title, topicArray } = book
+
+        const result = await bookCollection.findOneAndUpdate(
+            { title },
+            { $set: { topicArray } },
+            { upsert: true }
+        )
+
+        console.log("---- synergy result:", result)
+        res.status(200).json(result)
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.delete("/:bookId", async (req, res, next) => {
+    try {
+        const stringId = req.params.bookId
+        const objectId = ObjectId.createFromHexString(stringId)
+        const result = await bookCollection.findOneAndDelete({_id: objectId})
+
+        res.status(200).json(result)
+    } catch (error) {
     }
 })
 
