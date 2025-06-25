@@ -19,6 +19,25 @@ router.get("/:studentId", async (req, res, next) => {
     }
 })
 
+router.get("/:studentId/:bookId", async (req, res, next) => {
+    try {
+
+        const studentStringId = req.params.studentId
+        const studentObjectId = ObjectId.createFromHexString(studentStringId)
+
+        const bookStringId = req.params.bookId
+        const bookObjectId = ObjectId.createFromHexString(bookStringId)
+        const result = await progressCollection.find({
+            studentId: studentObjectId,
+            bookId: bookObjectId,
+        }).toArray()
+        res.status(200).json(result)
+
+    } catch (error) {
+        next(error)
+    }
+})
+
 router.post("/:studentId", async (req, res, next) => {
     try {
         const studentId = req.params.studentId
