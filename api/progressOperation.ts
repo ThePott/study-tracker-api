@@ -57,7 +57,6 @@ const prepareForAssigningBook = (studentObjectId: ObjectId, book: WithId<Documen
             }
         }
     }
-    console.log(bulkProgressOperation)
     return bulkProgressOperation;
 };
 
