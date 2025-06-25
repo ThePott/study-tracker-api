@@ -31,7 +31,7 @@ router.get("/:id", async (req, res, next) => {
     }
 })
 
-router.post("/", async (req, res, next) => {
+router.post("/old-development", async (req, res, next) => {
     try {
         const { title, topicArray } = req.body
         // const result = await bookCollection.insertOne({title, topicArray})
@@ -73,6 +73,7 @@ router.delete("/:bookId", async (req, res, next) => {
 
         res.status(200).json(result)
     } catch (error) {
+        next(error)
     }
 })
 
