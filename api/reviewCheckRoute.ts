@@ -48,7 +48,7 @@ router.get("/:studentId", async (req, res, next) => {
     try {
         const studentId = req.params.studentId
 
-        const result = await reviewCheckCollection.find({studentId: studentId}).toArray()
+        const result = await reviewCheckCollection.find({ studentId: studentId }).toArray()
         // console.log("---- second", result.length)
         res.status(200).json(result)
     } catch (error) {
@@ -59,12 +59,49 @@ router.get("/:studentId", async (req, res, next) => {
 router.delete("/:studentId", async (req, res, next) => {
     try {
         const studentId = req.params.studentId
-        const result = await reviewCheckCollection.deleteMany({studentId})
+        const result = await reviewCheckCollection.deleteMany({ studentId })
         res.status(200).json(result)
     } catch (error) {
         next(error)
     }
 })
+
+router.patch("/:studentId", async (req, res, next) => {
+    try {
+        const stringId = req.params.studentId
+        const objectId = ObjectId.createFromHexString(stringId)
+        const student = await studentCollection.findOne({ _id: objectId })
+        if (!student) {
+            const error = new Error("Student not found")
+            error.name = "NotFoundError"  // Optional but helpful for error handling
+            throw error
+        }
+
+        const { reviewCheckIdStatusDict } = req.body
+        if (!reviewCheckIdStatusDict || Object.keys(reviewCheckIdStatusDict).length === 0) {
+            const error = new Error("Missing review check id array")
+            error.name = "BadRequestError"
+            throw error
+        }
+
+
+
+        // res.status(200).json({})
+        res.status(200).send
+    } catch (error) {
+        next(error)
+    }
+})
+
+
+
+
+
+
+
+
+
+
 
 router.use(errorHandler);
 
