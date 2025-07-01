@@ -3,6 +3,7 @@ import { errorHandler } from "../config/errorHandler"
 import { bookCollection, progressCollection, studentCollection, reviewCheckCollection } from "../config/database"
 import { ObjectId } from "mongodb"
 import convertToJson, { ReviewCheckData } from "../demo/reviewCheckConverter"
+import { prepareUpdatingReviewCheck } from "./reviewCheckOperations"
 const router = express.Router()
 
 router.post("/:studentId/development", async (req, res, next) => {
@@ -77,17 +78,19 @@ router.patch("/:studentId", async (req, res, next) => {
             throw error
         }
 
-        const { reviewCheckIdStatusDict } = req.body
-        if (!reviewCheckIdStatusDict || Object.keys(reviewCheckIdStatusDict).length === 0) {
+        const reviewCheckIdStatusDictArray = req.body
+        if (!reviewCheckIdStatusDictArray || reviewCheckIdStatusDictArray.length === 0) {
             const error = new Error("Missing review check id array")
             error.name = "BadRequestError"
             throw error
         }
 
+        const bulkOperation = prepareUpdatingReviewCheck(objectId, reviewCheckIdStatusDictArray)
 
-
-        // res.status(200).json({})
-        res.status(200).send
+        const result = await reviewCheckCollection.bulkWrite(bulkOperation, { ordered: true });
+        // console.log("---- bulk:", bulkOperation)
+        // res.status(200).json({bulkOperation})
+        res.status(200).json({result})
     } catch (error) {
         next(error)
     }

@@ -58,7 +58,7 @@ router.post("/:studentId", async (req, res, next) => {
         }
 
         const bulkProgressOperationArray: readonly AnyBulkWriteOperation<Document>[] = prepareForAssigningBook(objectId, book)
-        const result = await progressCollection.bulkWrite(bulkProgressOperationArray, { ordered: false });
+        const result = await progressCollection.bulkWrite(bulkProgressOperationArray, { ordered: true });
 
         res.status(200).json(result)
     } catch (error) {
