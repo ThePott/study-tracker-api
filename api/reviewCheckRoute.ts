@@ -8,8 +8,8 @@ const router = express.Router()
 
 router.post("/:studentId/development", async (req, res, next) => {
     try {
-        const studentId = req.params.studentId
-        const objectId = ObjectId.createFromHexString(studentId)
+        const stringId = req.params.studentId
+        const objectId = ObjectId.createFromHexString(stringId)
         const student = await studentCollection.findOne({ _id: objectId })
         if (!student) {
             const error = new Error("404")
@@ -17,7 +17,7 @@ router.post("/:studentId/development", async (req, res, next) => {
             throw error
         }
 
-        const convertedJson: ReviewCheckData[] = convertToJson(studentId)
+        const convertedJson: ReviewCheckData[] = convertToJson(objectId)
         const bulkOperation = convertedJson.map((data) => ({
             insertOne: {
                 document: data
@@ -47,9 +47,10 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:studentId", async (req, res, next) => {
     try {
-        const studentId = req.params.studentId
+        const stringId  = req.params.studentId
+        const objectId = ObjectId.createFromHexString(stringId)
 
-        const result = await reviewCheckCollection.find({ studentId: studentId }).toArray()
+        const result = await reviewCheckCollection.find({ studentId: objectId }).toArray()
         // console.log("---- second", result.length)
         res.status(200).json(result)
     } catch (error) {

@@ -12,8 +12,8 @@ const prepareUpdatingReviewCheck = (studentObjectId: ObjectId, reviewCheckIdStat
 
         const operation = {
             updateOne: {
-                filter: { _id: objectId },
-                // filter: { _id: objectId, studentId: studentObjectId },
+                // filter: { _id: objectId },
+                filter: { _id: objectId, studentId: studentObjectId },
                 update: { $set: { status } },
                 upsert: false // This will insert if document doesn't exist
             }
