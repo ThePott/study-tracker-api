@@ -1,9 +1,10 @@
 import express from "express"
+import { ObjectId, WithId } from "mongodb"
+import { reviewCheckCollection, studentCollection } from "../config/database"
 import { errorHandler } from "../config/errorHandler"
-import { bookCollection, progressCollection, studentCollection, reviewCheckCollection } from "../config/database"
-import { ObjectId } from "mongodb"
-import convertToJson, { ReviewCheckData } from "../demo/reviewCheckConverter"
-import { prepareUpdatingReviewCheck } from "./reviewCheckOperations"
+import convertToJson from "../demo/reviewCheckConverter"
+import { ReviewCheckData } from "../interfaces/interfaces"
+import { groupReviewCheck, prepareUpdatingReviewCheck } from "./reviewCheckOperations"
 const router = express.Router()
 
 router.post("/:studentId/development", async (req, res, next) => {
@@ -28,8 +29,6 @@ router.post("/:studentId/development", async (req, res, next) => {
 
 
         res.status(200).json(result)
-
-        // res.status(200).json(convertedJson)
     } catch (error) {
         next(error)
     }
@@ -47,12 +46,12 @@ router.get("/", async (req, res, next) => {
 
 router.get("/:studentId", async (req, res, next) => {
     try {
-        const stringId  = req.params.studentId
+        const stringId = req.params.studentId
         const objectId = ObjectId.createFromHexString(stringId)
 
-        const result = await reviewCheckCollection.find({ studentId: objectId }).toArray()
-        // console.log("---- second", result.length)
-        res.status(200).json(result)
+        const result = await reviewCheckCollection.find({ studentId: objectId }).toArray() as WithId<ReviewCheckData>[]
+        const { bookTitleArray, groupedBookObject } = groupReviewCheck(result)
+        res.status(200).json({ bookTitleArray, groupedBookObject })
     } catch (error) {
         next(error)
     }
@@ -91,7 +90,7 @@ router.patch("/:studentId", async (req, res, next) => {
         const result = await reviewCheckCollection.bulkWrite(bulkOperation, { ordered: true });
         // console.log("---- bulk:", bulkOperation)
         // res.status(200).json({bulkOperation})
-        res.status(200).json({result})
+        res.status(200).json({ result })
     } catch (error) {
         next(error)
     }

@@ -1,5 +1,5 @@
-import { ObjectId } from "mongodb";
-import { ReviewCheckIdStatusDict } from "../interfaces/interfaces";
+import { ObjectId, WithId } from "mongodb";
+import { ReviewCheckData, ReviewCheckIdStatusDict } from "../interfaces/interfaces";
 
 const prepareUpdatingReviewCheck = (studentObjectId: ObjectId, reviewCheckIdStatusDictArray: ReviewCheckIdStatusDict[]) => {
     const bulkOperation = []
@@ -26,4 +26,18 @@ const prepareUpdatingReviewCheck = (studentObjectId: ObjectId, reviewCheckIdStat
     return bulkOperation
 }
 
-export { prepareUpdatingReviewCheck }
+const groupReviewCheck = (reviewCheckArray: WithId<ReviewCheckData>[]) => {
+    const groupedBookObject = Object.groupBy(
+        reviewCheckArray,
+        ({ bookTitle }) => bookTitle
+    );
+    const bookTitleArray = Object.keys(groupedBookObject)
+
+    return { bookTitleArray, groupedBookObject }
+}
+
+export { prepareUpdatingReviewCheck, groupReviewCheck }
+
+function useRef<T>(arg0: null) {
+    throw new Error("Function not implemented.");
+}
