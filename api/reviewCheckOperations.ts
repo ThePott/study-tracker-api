@@ -5,7 +5,8 @@ const prepareUpdatingReviewCheck = (studentObjectId: ObjectId, reviewCheckIdStat
     const bulkOperation = []
 
     for (const reviewCheckIdStatusDict of reviewCheckIdStatusDictArray) {
-        const stringId = reviewCheckIdStatusDict.id
+        const stringId = reviewCheckIdStatusDict.reviewCheckId
+        console.log("---- review check id:", stringId, reviewCheckIdStatusDict, reviewCheckIdStatusDictArray)
         const objectId = ObjectId.createFromHexString(stringId)
 
         const status = reviewCheckIdStatusDict.status
