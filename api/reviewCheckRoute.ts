@@ -96,16 +96,6 @@ router.patch("/:studentId", async (req, res, next) => {
     }
 })
 
-
-
-
-
-
-
-
-
-
-
 router.use(errorHandler);
 
 export default router

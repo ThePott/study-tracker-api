@@ -4,11 +4,5 @@
 # ██  ██  ██      ██ 
 # ██  ██  ██      ██
 
-# ==== 완료 ====
-- checkbox status change 받을 api 구축
-
-# ==== 중요 ====
-(이제 프론트)
-# ==== 덜 중요 ====
-- 서버에서 학생한테 book 보낼 때 권별로 분류해서 보내야 함
-- 서버에서 자료 가져올 때 순서 보장되는지 확인해야 <-- 보장 안 됨! <-- 보장됨, bulkWrite 할 때 order: true 하면 됨
+# ==== 목표 ====
+- page group -> step group -> make topic __step for each step group
