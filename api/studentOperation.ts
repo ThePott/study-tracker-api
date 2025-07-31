@@ -1,4 +1,4 @@
-import { ObjectId, WithId, Document } from "mongodb"
+import { Document, ObjectId, WithId } from "mongodb";
 
 
 const prepareForAssigningBook = (studentId: ObjectId, book: WithId<Document>) => {
@@ -29,7 +29,7 @@ const prepareForAssigningBook = (studentId: ObjectId, book: WithId<Document>) =>
 
                     // Current MVP fields with default values
                     completed: "NOT_STARTED",
-                    whenToDo: "IN_CLASS", // or "HOMEWORK"
+                    inProgressStatus: "TODAY_WORK",
                     doNeedToAsk: false,
                 };
 
@@ -49,4 +49,4 @@ const prepareForAssigningBook = (studentId: ObjectId, book: WithId<Document>) =>
     return bulkProgressOperation;
 };
 
-export { prepareForAssigningBook }
+export { prepareForAssigningBook };

@@ -1,15 +1,15 @@
 import { ObjectId } from "mongodb";
 
-const checkboxStatusArray = ["DONE", "PASS", "WRONG", "CORRECT", "NOT_SOLVED"] as const;
-type CheckboxStatus = typeof checkboxStatusArray[number]
+export const checkboxStatusArray = ["DONE", "PASS", "WRONG", "CORRECT", "NOT_SOLVED"] as const;
+export type CheckboxStatus = typeof checkboxStatusArray[number]
 
 
-interface ReviewCheckIdStatusDict {
+export interface ReviewCheckIdStatusDict {
     reviewCheckId: string;
     status: CheckboxStatus
 }
 
-interface ReviewCheckData {
+export interface ReviewCheckData {
     studentId: ObjectId;
     bookTitle: string;
     topicTitle: string;
@@ -22,4 +22,21 @@ interface ReviewCheckData {
     createdAt: Date;
 }
 
-export { checkboxStatusArray, CheckboxStatus, ReviewCheckIdStatusDict, ReviewCheckData }
+export const completedStatusArray = ["NOT_STARTED", "IN_PROGRESS", "COMPLETED"] as const;
+export type CompletedStatus = typeof completedStatusArray[number]; // "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED"
+
+export const inProgressStatusArray = ["PREV_HOMEWROK", "TODAY_WORK", "NEXT_HOMEWORK"]
+export type InProgressStatus = typeof inProgressStatusArray[number]
+
+export interface ProgressData {
+  studentId: ObjectId;
+  bookId: ObjectId;
+  topicId: string;
+  stepId: string;
+  groupId: string;
+
+  completed: CompletedStatus; // adjust based on possible values
+  inProgressStatus: InProgressStatus;
+  doNeedToAsk: boolean;
+  // whenToDo: WhenToDo // adjust based on possible values
+}

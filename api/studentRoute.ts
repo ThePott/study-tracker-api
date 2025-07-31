@@ -1,7 +1,7 @@
 import express from "express"
 import { errorHandler } from "../config/errorHandler"
 import { studentCollection, progressCollection, bookCollection } from "../config/database"
-import { AnyBulkWriteOperation, ObjectId, Document } from "mongodb"
+import { AnyBulkWriteOperation, ObjectId, Document, InsertOneModel } from "mongodb"
 
 import { prepareForAssigningBook } from "./studentOperation"
 
@@ -16,6 +16,34 @@ router.post("/", async (req, res, next) => {
         next(error)
     }
 })
+
+// router.post("/development", async (req, res, next) => {
+//     try {
+//         const sampleNameArray = [
+//             "김민준", "이서준", "박도현", "최주원", "정하준",
+//             "강시우", "윤예준", "장지호", "임건우", "한도윤",
+//             "김채원", "이지민", "박서연", "최예은", "정소율",
+//             "강하은", "윤서진", "장윤서", "임채은", "한지우"
+//         ]
+
+//         interface StudentDocument {
+//             name: string
+//         }
+
+//         const documentArray: StudentDocument[] = sampleNameArray.reduce(
+//             (acc, name) => {
+//                 return [...acc, { name }]
+//             },
+//             [] as StudentDocument[]
+//         )
+
+//         const result = await studentCollection.insertMany(documentArray)
+
+//         res.status(200).json(result)
+//     } catch (error) {
+//         next(error)
+//     }
+// })
 
 router.get("/", async (req, res, next) => {
     try {
@@ -66,6 +94,22 @@ router.post("/:id/progress", async (req, res, next) => {
         next(error)
     }
 })
+
+// router.delete("/:id/progressClear/development", async (req, res, next) => {
+//     try {
+//         console.log("---- here")
+//         const studentIdString = req.params.id
+//         const studentId = ObjectId.createFromHexString(studentIdString)
+
+//         const result = await progressCollection.deleteMany({ studentId })
+
+//         console.log("---- clear progress result:", result)
+        
+//         res.status(200).json(result)
+//     } catch (error) {
+//         next(error)
+//     }
+// })
 
 
 

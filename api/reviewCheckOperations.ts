@@ -6,7 +6,7 @@ const prepareUpdatingReviewCheck = (studentObjectId: ObjectId, reviewCheckIdStat
 
     for (const reviewCheckIdStatusDict of reviewCheckIdStatusDictArray) {
         const stringId = reviewCheckIdStatusDict.reviewCheckId
-        console.log("---- review check id:", stringId, reviewCheckIdStatusDict, reviewCheckIdStatusDictArray)
+        // console.log("---- review check id:", stringId, reviewCheckIdStatusDict, reviewCheckIdStatusDictArray)
         const objectId = ObjectId.createFromHexString(stringId)
 
         const status = reviewCheckIdStatusDict.status

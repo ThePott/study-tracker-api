@@ -41,7 +41,8 @@ const prepareForAssigningBook = (studentObjectId: ObjectId, book: WithId<Documen
 
                     // Current MVP fields with default values
                     completed: "NOT_STARTED",
-                    whenToDo: "IN_CLASS", // or "HOMEWORK"
+                    // whenToDo: "IN_CLASS", // or "HOMEWORK"
+                    inProgressStatus: "TODAY_WORK",
                     doNeedToAsk: false,
                 };
 

@@ -69,6 +69,7 @@ router.delete("/:studentId", async (req, res, next) => {
 
 router.patch("/:studentId", async (req, res, next) => {
     try {
+        console.log("---- patch requested")
         const stringId = req.params.studentId
         const objectId = ObjectId.createFromHexString(stringId)
         const student = await studentCollection.findOne({ _id: objectId })
