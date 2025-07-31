@@ -1,8 +1,9 @@
 import express from "express"
+import { AnyBulkWriteOperation, Document, ObjectId } from "mongodb"
+import { bookCollection, progressCollection, studentCollection } from "../config/database"
 import { errorHandler } from "../config/errorHandler"
-import { studentCollection, progressCollection, bookCollection } from "../config/database"
-import { AnyBulkWriteOperation, ObjectId, Document, InsertOneModel } from "mongodb"
 
+import { prepareUpdatingCompleted, prepareUpdatingInProgressStatus } from "./progressOperation"
 import { prepareForAssigningBook } from "./studentOperation"
 
 const router = express.Router()
@@ -90,6 +91,42 @@ router.post("/:id/progress", async (req, res, next) => {
 
         res.status(200).json(result)
 
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.patch("/:id/progress/in-progress-status", async (req, res, next) => {
+    try {
+        const studentIdString = req.params.id
+        const studentId = ObjectId.createFromHexString(studentIdString)
+
+        const { inProgressStatusDict } = req.body
+
+        const bulkOperation = prepareUpdatingInProgressStatus(studentId, inProgressStatusDict)
+
+        const result = await progressCollection.bulkWrite(bulkOperation, { ordered: true })
+
+
+        res.status(200).json({result})
+    } catch (error) {
+        next(error)
+    }
+})
+
+router.patch("/:id/progress/completed", async (req, res, next) => {
+    try {
+        const studentIdString = req.params.id
+        const studentId = ObjectId.createFromHexString(studentIdString)
+
+        const { completedDict } = req.body
+
+        const bulkOperation = prepareUpdatingCompleted(studentId, completedDict)
+
+        const result = await progressCollection.bulkWrite(bulkOperation, { ordered: true })
+
+
+        res.status(200).json({result})
     } catch (error) {
         next(error)
     }

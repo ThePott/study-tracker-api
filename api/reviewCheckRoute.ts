@@ -88,7 +88,7 @@ router.patch("/:studentId", async (req, res, next) => {
 
         const bulkOperation = prepareUpdatingReviewCheck(objectId, reviewCheckIdStatusDictArray)
 
-        const result = await reviewCheckCollection.bulkWrite(bulkOperation, { ordered: true });
+        const result = await reviewCheckCollection.bulkWrite(bulkOperation, { ordered: true })
         // console.log("---- bulk:", bulkOperation)
         // res.status(200).json({bulkOperation})
         res.status(200).json({ result })
