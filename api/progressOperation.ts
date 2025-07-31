@@ -1,4 +1,5 @@
-import { ObjectId, WithId, Document } from "mongodb"
+import { ObjectId, WithId, Document, AnyBulkWriteOperation } from "mongodb"
+import { CompletedDict, InProgressStatus, InProgressStatusDict } from "../interfaces/interfaces"
 
 const throwErrorIfFalsy = (id: any) => {
     if (id) { return }
@@ -9,7 +10,7 @@ const throwErrorIfFalsy = (id: any) => {
     throw error
 }
 
-const prepareForAssigningBook = (studentObjectId: ObjectId, book: WithId<Document>) => {
+export const prepareForAssigningBook = (studentObjectId: ObjectId, book: WithId<Document>) => {
     const bulkProgressOperation = [];
 
     // Extract book ID (use the _id from the book document)
@@ -61,4 +62,48 @@ const prepareForAssigningBook = (studentObjectId: ObjectId, book: WithId<Documen
     return bulkProgressOperation;
 };
 
-export { prepareForAssigningBook }
+export const prepareUpdatingInProgressStatus = (studentObjectId: ObjectId, inProgressStatusDict: InProgressStatusDict): readonly AnyBulkWriteOperation<Document>[] => {
+    const bulkOperation = [] as AnyBulkWriteOperation<Document>[]
+
+    const entries = Object.entries(inProgressStatusDict)
+    entries.forEach((entry) => {
+        const stringId = entry[0]
+        const objectId = ObjectId.createFromHexString(stringId)
+
+        const inProgressStatus = entry[1]
+
+        const operation = {
+            updateOne: {
+                filter: { _id: objectId, studentId: studentObjectId },
+                update: { $set: { inProgressStatus } },
+                upsert: false // This will insert if document doesn't exist
+            }
+        }
+
+        bulkOperation.push(operation)
+    })
+    return bulkOperation
+}
+
+export const prepareUpdatingCompleted = (studentObjectId: ObjectId, completedDict: CompletedDict): readonly AnyBulkWriteOperation<Document>[] => {
+    const bulkOperation = [] as AnyBulkWriteOperation<Document>[]
+
+    const entries = Object.entries(completedDict)
+    entries.forEach((entry) => {
+        const stringId = entry[0]
+        const objectId = ObjectId.createFromHexString(stringId)
+
+        const completed = entry[1]
+
+        const operation = {
+            updateOne: {
+                filter: { _id: objectId, studentId: studentObjectId },
+                update: { $set: { completed } },
+                upsert: false // This will insert if document doesn't exist
+            }
+        }
+
+        bulkOperation.push(operation)
+    })
+    return bulkOperation
+}
