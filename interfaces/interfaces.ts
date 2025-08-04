@@ -40,3 +40,7 @@ export interface ProgressData {
   doNeedToAsk: boolean;
   // whenToDo: WhenToDo // adjust based on possible values
 }
+
+export type InProgressStatusDict = Record<string, InProgressStatus>
+
+export type CompletedDict = Record<string, CompletedStatus>
