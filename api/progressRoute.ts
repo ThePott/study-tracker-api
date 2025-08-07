@@ -116,6 +116,18 @@ router.patch("/:progressId", async (req, res, next) => {
     }
 })
 
+router.delete("/book/:bookId/development", async (req, res, next) => {
+    try {
+        const bookStringId = req.params.bookId
+        const bookObjectId = ObjectId.createFromHexString(bookStringId)
+
+        const result = await progressCollection.deleteMany({bookId: bookObjectId})
+        res.status(200).json(result)
+    } catch(error) {
+        next(error)
+    } 
+})
+
 router.use(errorHandler);
 
 export default router

@@ -4,6 +4,7 @@ import { bookCollection, progressCollection, studentCollection } from "../config
 import { ObjectId } from "mongodb"
 
 import convertToBook from "../demo/old/synergy-book-converter"
+import { convertGoogleSheetToBook } from "../utils/googleSheetToBook/convertGoogleSheetToBook"
 
 const router = express.Router()
 
@@ -49,14 +50,10 @@ router.post("/old-development", async (req, res, next) => {
 
 router.post("/development", async (req, res, next) => {
     try {
-        const book = convertToBook()
-        const { title, topicArray } = book
+        const book = convertGoogleSheetToBook("마플 시너지 수학(상)")
+        // const { title, topicArray } = book
 
-        const result = await bookCollection.findOneAndUpdate(
-            { title },
-            { $set: { topicArray } },
-            { upsert: true }
-        )
+        const result = await bookCollection.insertOne(book)
 
         console.log("---- synergy result:", result)
         res.status(200).json(result)
