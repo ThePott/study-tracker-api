@@ -3,7 +3,7 @@ import { errorHandler } from "../config/errorHandler"
 import { bookCollection, progressCollection, studentCollection } from "../config/database"
 import { ObjectId } from "mongodb"
 
-import convertToBook from "../demo/synergy-book-converter"
+import convertToBook from "../demo/old/synergy-book-converter"
 
 const router = express.Router()
 

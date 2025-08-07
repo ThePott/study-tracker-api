@@ -2,7 +2,7 @@ import express from "express"
 import { ObjectId, WithId } from "mongodb"
 import { reviewCheckCollection, studentCollection } from "../config/database"
 import { errorHandler } from "../config/errorHandler"
-import convertToJson from "../demo/reviewCheckConverter"
+import convertToJson from "../demo/old/reviewCheckConverter"
 import { ReviewCheckData } from "../interfaces/interfaces"
 import { groupReviewCheck, prepareUpdatingReviewCheck } from "./reviewCheckOperations"
 const router = express.Router()

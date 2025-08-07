@@ -16,7 +16,7 @@ const server = http.createServer(app)
 
 // Add CORS middleware BEFORE other middleware
 app.use(cors({
-    origin: ['http://localhost:5173'], // Your frontend URLs
+    origin: ['http://localhost:5173', 'http://localhost:5174'], // Your frontend URLs
     credentials: true,
     methods: ['GET', 'POST', 'PUT', "PATCH", 'DELETE'],
     allowedHeaders: ['Content-Type', 'Authorization']

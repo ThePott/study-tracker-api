@@ -36,7 +36,7 @@ export interface ProgressData {
   groupId: string;
 
   completed: CompletedStatus; // adjust based on possible values
-  inProgressStatus: InProgressStatus;
+  inProgressStatus: InProgressStatus
   doNeedToAsk: boolean;
   // whenToDo: WhenToDo // adjust based on possible values
 }

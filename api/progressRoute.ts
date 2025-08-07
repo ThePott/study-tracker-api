@@ -6,12 +6,35 @@ import { prepareForAssigningBook } from "./progressOperation"
 
 const router = express.Router()
 
+router.get("/:bookId/development", async (req, res, next) => {
+    try {
+        const bookStringId = req.params.bookId
+        const bookObjectId = ObjectId.createFromHexString(bookStringId)
+        const book = await bookCollection.findOne({ _id: bookObjectId })
+
+        if (!book) { throw new Error("---- Book Not Found") }
+        // Extract groupId and group pairs
+        const result = book.topicArray.flatMap((topic: any) =>
+            topic.stepArray.flatMap((step: any) =>
+                step.questionGroupArray.map((questionGroup: any) => ({
+                    groupId: questionGroup.groupId,
+                    group: questionGroup.group
+                }))
+            )
+        )
+
+        res.json({ message: "so far so good", result })
+    } catch (error) {
+        next(error)
+    }
+})
+
 router.get("/:studentId", async (req, res, next) => {
     try {
 
         const stringId = req.params.studentId
         const objectId = ObjectId.createFromHexString(stringId)
-        const result = await progressCollection.find({studentId: objectId}).toArray()
+        const result = await progressCollection.find({ studentId: objectId }).toArray()
         res.status(200).json(result)
 
     } catch (error) {
@@ -42,7 +65,7 @@ router.post("/:studentId", async (req, res, next) => {
     try {
         const studentId = req.params.studentId
         const objectId = ObjectId.createFromHexString(studentId)
-        const student = await studentCollection.findOne({_id: objectId})
+        const student = await studentCollection.findOne({ _id: objectId })
         if (!student) {
             const error = new Error("Student Not Found")
             error.message = "NotFoundError"
@@ -50,7 +73,7 @@ router.post("/:studentId", async (req, res, next) => {
         }
 
         const { bookTitle } = req.body
-        const book = await bookCollection.findOne({title: bookTitle})
+        const book = await bookCollection.findOne({ title: bookTitle })
         if (!book) {
             const error = new Error("Book Not Found")
             error.name = "NOT_FOUND_ERROR"
