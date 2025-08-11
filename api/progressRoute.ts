@@ -6,6 +6,7 @@ import { prepareForAssigningBook } from "./progressOperation"
 
 const router = express.Router()
 
+/** bookId인지, studentId 인지 헷갈릴 수 있다. 앞에 prefix를 넣든지 해야지 */
 router.get("/:bookId/development", async (req, res, next) => {
     try {
         const bookStringId = req.params.bookId
@@ -29,12 +30,16 @@ router.get("/:bookId/development", async (req, res, next) => {
     }
 })
 
-router.get("/:studentId", async (req, res, next) => {
+router.get("/student/:studentId", async (req, res, next) => {
     try {
 
         const stringId = req.params.studentId
         const objectId = ObjectId.createFromHexString(stringId)
         const result = await progressCollection.find({ studentId: objectId }).toArray()
+        
+        const book = await bookCollection.findOne({title: "마플 시너지 수학(상)"})
+        // console.table(book)
+        console.table(result)
         res.status(200).json(result)
 
     } catch (error) {
@@ -42,6 +47,7 @@ router.get("/:studentId", async (req, res, next) => {
     }
 })
 
+/** 사용할 일이 있나? */
 router.get("/:studentId/:bookId", async (req, res, next) => {
     try {
 

@@ -1,9 +1,8 @@
 import express from "express"
-import { errorHandler } from "../config/errorHandler"
-import { bookCollection, progressCollection, studentCollection } from "../config/database"
 import { ObjectId } from "mongodb"
+import { bookCollection } from "../config/database"
+import { errorHandler } from "../config/errorHandler"
 
-import convertToBook from "../demo/old/synergy-book-converter"
 import { convertGoogleSheetToBook } from "../utils/googleSheetToBook/convertGoogleSheetToBook"
 
 const router = express.Router()

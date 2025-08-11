@@ -55,21 +55,22 @@ router.get("/", async (req, res, next) => {
     }
 })
 
-router.get("/:id/progress", async (req, res, next) => {
-    try {
-        const studentIdString = req.params.id
-        // console.log(`---- length: ${studentIdString.length} "${studentIdString}"`)
-        const studentId = ObjectId.createFromHexString(studentIdString)
-        // const student = await studentCollection.findOne({ _id })
+/** /progress/student/:studentId로 대체 */
+// router.get("/:id/progress", async (req, res, next) => {
+//     try {
+//         const studentIdString = req.params.id
+//         // console.log(`---- length: ${studentIdString.length} "${studentIdString}"`)
+//         const studentId = ObjectId.createFromHexString(studentIdString)
+//         // const student = await studentCollection.findOne({ _id })
 
-        const progressArray = await progressCollection.find({ studentId }).toArray()
+//         const progressArray = await progressCollection.find({ studentId }).toArray()
 
-        res.status(200).json(progressArray)
+//         res.status(200).json(progressArray)
 
-    } catch (error) {
-        next(error)
-    }
-})
+//     } catch (error) {
+//         next(error)
+//     }
+// })
 
 router.post("/:id/progress", async (req, res, next) => {
     try {
